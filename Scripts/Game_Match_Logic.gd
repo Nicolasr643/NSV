@@ -8,24 +8,15 @@ var rival_sets = 0
 const COLOR_RIVAL := "coral"
 const COLOR_LOCAL := "teal"
 
+var roster_local: Array[Jugador] = []
+var roster_rival: Array[Jugador] = []
+
 const NOMBRES := {
-	"Local": {
-		"A": "Fernández", 
-		"D": "Gómez", 
-		"C": "Rodríguez", 
-		"O": "Álvarez", 
-		"T": "Suárez", 
-		"L": "Benítez"
-	},
-	"Rival": {
-		"A": "Cabrera", 
-		"D": "Duarte", 
-		"C": "Ibáñez", 
-		"O": "Molina", 
-		"T": "Paredes", 
-		"L": "Vega"
-	}
+	"Local": ["Fernández", "Gómez", "Rodríguez", "Álvarez", "Suárez", "Benítez"],
+	"Rival": ["Cabrera", "Duarte", "Ibáñez", "Molina", "Paredes", "Vega"]
 }
+const POSICIONES := ["A", "D", "C", "O", "T", "L"]
+
 const MENSAJES := {
 	"Saque": ["Saca"],
 	"Defensa": ["Pero Recibe"],
@@ -44,10 +35,29 @@ var sacador = "Local"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	generar_roster()
+	for pj in roster_local:
+		print(pj.nombre)
 
 
+
+
+#region Debug Equipo Crear
+func generar_roster() -> void:
+	var posiciones := ["A", "D", "C", "O", "T", "L"]
+	for i in posiciones.size():
+		roster_local.append(crear_jugador(NOMBRES["Local"][i], "Local", posiciones[i]))
+		roster_rival.append(crear_jugador(NOMBRES["Rival"][i], "Rival", posiciones[i]))
+
+func crear_jugador(nombre: String, equipo: String, posicion: String) -> Jugador:
+	var j := Jugador.new()
+	j.nombre = nombre
+	j.equipo = equipo
+	j.posicion_letra = posicion
+	return j
+#endregion
 # Called every frame. 'delta' is the elapsed time since the previous frame.
+
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
 		if event.keycode == KEY_1:
@@ -127,13 +137,17 @@ func es_delantero(jugador: String,equipo:String) -> bool:
 		return rotacionL.find(jugador) > 0 and rotacionL.find(jugador) < 4
 	else:
 		return rotacionR.find(jugador) > 0 and rotacionR.find(jugador) < 4
-func jugador_en(equipo: String,pos: int) -> String:
-	var indice_str := pos - 1 
+func jugador_en(equipo: String, numero_pos: int) -> Jugador:
+	var indice_str := numero_pos - 1
 	var rotacion_actual := rotacionL if equipo == "Local" else rotacionR
 	var letra_posicion := rotacion_actual[indice_str]
-	return NOMBRES[equipo][letra_posicion]
-func jugador_pos(equipo: String,pos: String) -> String:
-	return NOMBRES[equipo][pos]
+	return jugador_pos(equipo, letra_posicion)
+
+func jugador_pos(equipo: String, pos: String) -> Jugador:
+	var indice_roster := POSICIONES.find(pos)
+	var roster := roster_local if equipo == "Local" else roster_rival
+	return roster[indice_roster]
+	
 #endregion
 
 #region sheduler
@@ -158,12 +172,12 @@ func jugar_punto() -> void:
 	var entrasaque = randi_range(0,10)
 	
 	if entrasaque > 8:
-		generate_Event(jugador_saque,'Saque',bl_equipo_saque,1)
+		generate_Event(jugador_saque.nombre,'Saque',bl_equipo_saque,1)
 		return
 	if entrasaque < 3:
-		generate_Event(jugador_saque,'Saque',bl_equipo_saque,0)
+		generate_Event(jugador_saque.nombre,'Saque',bl_equipo_saque,0)
 		return
-	generate_Event(jugador_saque,'Saque',bl_equipo_saque,2)
+	generate_Event(jugador_saque.nombre,'Saque',bl_equipo_saque,2)
 	
 	var en_juego = true
 	var situacion_punto = 0
@@ -173,22 +187,22 @@ func jugar_punto() -> void:
 	while en_juego:
 		#recepcion
 		await get_tree().create_timer(0.5).timeout
-		generate_Event(jugador_receptor,'Defensa',bl_equipo_balon,2)
+		generate_Event(jugador_receptor.nombre,'Defensa',bl_equipo_balon,2)
 		#armado
 		await get_tree().create_timer(0.5).timeout
-		generate_Event(jugador_pos(equipo_al_balon,"A"),'Armado',bl_equipo_balon,2)
+		generate_Event(jugador_pos(equipo_al_balon,"A").nombre,'Armado',bl_equipo_balon,2)
 		#ataque
 		await get_tree().create_timer(0.5).timeout
 		
 		situacion_punto = randi_range(0,10)
 		
 		if situacion_punto > 8:
-			generate_Event(jugador_pos(equipo_al_balon,"D"),'Ataque',bl_equipo_balon,1)
+			generate_Event(jugador_pos(equipo_al_balon,"D").nombre,'Ataque',bl_equipo_balon,1)
 			return
 		if situacion_punto < 2:
-			generate_Event(jugador_pos(equipo_al_balon,"D"),'Ataque',bl_equipo_balon,0)
+			generate_Event(jugador_pos(equipo_al_balon,"D").nombre,'Ataque',bl_equipo_balon,0)
 			return
-		generate_Event(jugador_pos(equipo_al_balon,"D"),'Ataque',bl_equipo_balon,2)
+		generate_Event(jugador_pos(equipo_al_balon,"D").nombre,'Ataque',bl_equipo_balon,2)
 		
 		equipo_al_balon = 'Rival' if equipo_al_balon == 'Local' else 'Local'
 		bl_equipo_balon = true if equipo_al_balon == 'Local' else false

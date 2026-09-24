@@ -8,8 +8,8 @@ extends Control
 @onready var scroll: ScrollContainer = $Panel/Log_Display/ScrollContainer
 @onready var vbox_scroll: VBoxContainer = $Panel/Log_Display/ScrollContainer/VBoxContainer
 
-@onready var lb_saque_l: Label = $"Panel/VBoxContainer/Rotacion(UC)/Saque_L"
-@onready var lb_saque_r: Label = $"Panel/VBoxContainer/Rotacion(UC)/Saque_R"
+@onready var lb_saque_l: Label = $"Panel/VBoxContainer/Rotacion/Saque_L"
+@onready var lb_saque_r: Label = $"Panel/VBoxContainer/Rotacion/Saque_R"
 const COLOR_RIVAL := "coral"
 const COLOR_LOCAL := "teal"
 
@@ -52,11 +52,11 @@ func actualizar_set(team) -> void:
 	update_label(lb_local_puntaje,0)
 	update_label(lb_rival_puntaje,0)
 
-func actualizar_sacador(equipo,jugador:Array) -> void:
+func actualizar_sacador(equipo,jugador:Jugador) -> void:
 	if equipo == 'Local':
-		update_label(lb_saque_l,jugador[0] + ": " + jugador[1])
+		update_label(lb_saque_l,jugador.posicion_letra + ": " + jugador.nombre)
 	else:
-		update_label(lb_saque_r,jugador[0] + ": " + jugador[1])
+		update_label(lb_saque_r,jugador.posicion_letra + ": " + jugador.nombre)
 func finalizar_partido(equipo):
 	print("Ha ganado "+ equipo)
 #endregion

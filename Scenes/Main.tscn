@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://hg7lj8jhhuqw"]
 
-[ext_resource type="Script" uid="uid://qn5e1coteubn" path="res://Scenes/Game_Loop.gd" id="1_r150o"]
+[ext_resource type="Script" uid="uid://qn5e1coteubn" path="res://Scenes/Visual_Game_Hub.gd" id="1_r150o"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r150o"]
 content_margin_left = 4.0
@@ -105,13 +105,13 @@ layout_mode = 2
 text = "Al saque"
 horizontal_alignment = 1
 
-[node name="Rotacion(UC)" type="HBoxContainer" parent="Panel/VBoxContainer" unique_id=1071180217]
+[node name="Rotacion" type="HBoxContainer" parent="Panel/VBoxContainer" unique_id=1071180217]
 layout_mode = 2
 
-[node name="Saque_L" type="Label" parent="Panel/VBoxContainer/Rotacion(UC)" unique_id=1990267633]
+[node name="Saque_L" type="Label" parent="Panel/VBoxContainer/Rotacion" unique_id=1990267633]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Saque_R" type="Label" parent="Panel/VBoxContainer/Rotacion(UC)" unique_id=1619054532]
+[node name="Saque_R" type="Label" parent="Panel/VBoxContainer/Rotacion" unique_id=1619054532]
 layout_mode = 2
 size_flags_horizontal = 3

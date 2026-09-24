@@ -1,0 +1,3 @@
+res://Scenes/Main.tscn
+res://Scripts/Game_Match_Logic.gd
+res://Scenes/Visual_Game_Hub.gd
