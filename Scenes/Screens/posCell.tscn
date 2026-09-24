@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://d00ohemhjd08o"]
+
+[sub_resource type="GDScript" id="GDScript_mfps4"]
+script/source = "class_name PosCell
+extends PanelContainer
+
+@onready var label: Label = $Label
+
+func set_text(value: String) -> void:
+	label.text = value
+"
+
+[node name="PosCell" type="PanelContainer" unique_id=1777157149]
+custom_minimum_size = Vector2(80, 80)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = SubResource("GDScript_mfps4")
+
+[node name="Label" type="Label" parent="." unique_id=180373561]
+layout_mode = 2
+size_flags_vertical = 1
+text = "A"
+horizontal_alignment = 1
+vertical_alignment = 1

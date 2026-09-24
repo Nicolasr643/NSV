@@ -1,0 +1,12 @@
+63f7b34db8d8cdea90c76aacccf841ec
+::res://::1790211635
+icon.svg::CompressedTexture2D::1896588825518831120::1788277938::1788277943::1::::<><><>0<>0<>69677b93f77b1f6fa31a7c1af00de7ff<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
+::res://Autoloads/::1788277972
+::res://Scenes/::1790203609
+Game_Loop.gd::GDScript::1151688431328288015::1790203478::0::1::::<>Control<><>0<>0<><>::
+Main.tscn::PackedScene::505671283599335054::1790203609::0::1::::<><><>0<>0<><>::uid://qn5e1coteubn::::res://Scenes/Game_Loop.gd
+::res://Scenes/Screens/::1790203186
+posCell.tscn::PackedScene::8966455353298948444::1790203186::0::1::::<><><>0<>0<><>::
+::res://Scripts/::1790203569
+Events.gd::GDScript::7827244536108438711::1790203245::0::1::::<>Node<><>0<>0<><>::
+main_logic.gd::GDScript::247257648740813940::1790203569::0::1::::<>Node<><>0<>0<><>::
