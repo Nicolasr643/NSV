@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://1qtplvr74dnu"]
+
+[ext_resource type="Script" uid="uid://gb541iup63p3" path="res://cancha.gd" id="1_o0y13"]
+[ext_resource type="Texture2D" uid="uid://dcyb7u5bktfmv" path="res://Sprites/Cancha.png" id="2_8roi0"]
+[ext_resource type="PackedScene" uid="uid://b20jwtjgs7ms7" path="res://Scenes/pelota.tscn" id="2_o0phj"]
+[ext_resource type="PackedScene" uid="uid://b56ajwehv1uq7" path="res://Scenes/sombra_pelota.tscn" id="3_o0phj"]
+
+[node name="Cancha" type="Control" unique_id=1704209549]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(76, 369)
+script = ExtResource("1_o0y13")
+escena_pelota = ExtResource("2_o0phj")
+escena_sombra_pelota = ExtResource("3_o0phj")
+
+[node name="Fondo" type="TextureRect" parent="." unique_id=1128458040]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(52, 53)
+texture = ExtResource("2_8roi0")
+expand_mode = 1

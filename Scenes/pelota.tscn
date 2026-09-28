@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://b20jwtjgs7ms7"]
+
+[ext_resource type="Script" uid="uid://bjcym5rq1ywa5" path="res://pelota_drag.gd" id="1_rb83p"]
+[ext_resource type="Texture2D" uid="uid://dnapvekuypcfh" path="res://Sprites/Pelota.png" id="2_i6fn2"]
+[ext_resource type="Script" uid="uid://btxtkf87gj314" path="res://Scripts/flecha.gd" id="3_70see"]
+
+[node name="Pelota" type="Control" unique_id=1285944538]
+custom_minimum_size = Vector2(12.8, 12.8)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 12.8
+offset_bottom = 12.8
+script = ExtResource("1_rb83p")
+
+[node name="Icono" type="TextureRect" parent="." unique_id=1946762097]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_i6fn2")
+expand_mode = 1
+
+[node name="Flecha" type="Control" parent="." unique_id=611386598]
+z_index = 1
+custom_minimum_size = Vector2(12.8, 12.8)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(172, -84)
+mouse_filter = 2
+script = ExtResource("3_70see")

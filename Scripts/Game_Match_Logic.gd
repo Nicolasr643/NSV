@@ -15,6 +15,9 @@ const NOMBRES := {
 	"Local": ["Fernández", "Gómez", "Rodríguez", "Álvarez", "Suárez", "Benítez"],
 	"Rival": ["Cabrera", "Duarte", "Ibáñez", "Molina", "Paredes", "Vega"]
 }
+
+@onready var attack_scene: PackedScene = preload("res://Scenes/cancha.tscn")
+
 const POSICIONES := ["A", "D", "C", "O", "T", "L"]
 
 const MENSAJES := {
@@ -61,12 +64,7 @@ func crear_jugador(nombre: String, equipo: String, posicion: String) -> Jugador:
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
 		if event.keycode == KEY_1:
-			if randi_range(0,1):
-				#generate_Event(NOMBRES.Local.pick_random(),1)
-				pass
-			else:
-				#generate_Event(NOMBRES.Rival.pick_random(),0)
-				pass
+			escena_ataque()
 		if event.keycode == KEY_2:
 			jugar_punto()
 
@@ -124,12 +122,12 @@ func rotar(equipo) -> void:
 		rotacionL = rotacionL[-1] + rotacionL.substr(0, rotacionL.length() - 1)
 		print("Local")
 		print(rotacionL)
-		Events.actualizar_rotacion.emit(equipo,[rotacionL[0],jugador_pos(equipo,rotacionL[0])])
+		Events.actualizar_rotacion.emit(equipo,jugador_pos(equipo,rotacionL[0]))
 	else:
 		rotacionR = rotacionR[-1] + rotacionR.substr(0, rotacionR.length() - 1)
 		print("Rival")
 		print(rotacionR)
-		Events.actualizar_rotacion.emit(equipo,[rotacionR[0],jugador_pos(equipo,rotacionR[0])])
+		Events.actualizar_rotacion.emit(equipo,jugador_pos(equipo,rotacionR[0]))
 		
 		
 func es_delantero(jugador: String,equipo:String) -> bool:
@@ -183,11 +181,12 @@ func jugar_punto() -> void:
 	var situacion_punto = 0
 	var equipo_al_balon = rival_saque
 	var bl_equipo_balon = vl_equipo_rival
-	var jugador_receptor = jugador_en(rival_saque,randi_range(1,6))
+	
 	while en_juego:
+		
 		#recepcion
 		await get_tree().create_timer(0.5).timeout
-		generate_Event(jugador_receptor.nombre,'Defensa',bl_equipo_balon,2)
+		generate_Event(jugador_pos(equipo_al_balon,"L").nombre,'Defensa',bl_equipo_balon,2)
 		#armado
 		await get_tree().create_timer(0.5).timeout
 		generate_Event(jugador_pos(equipo_al_balon,"A").nombre,'Armado',bl_equipo_balon,2)
@@ -209,4 +208,14 @@ func jugar_punto() -> void:
 		
 	
 
+#endregion
+
+#region escenas
+func escena_ataque() -> void:
+	var cancha = attack_scene.instantiate()
+	Events.mostrar_logs.emit(false)
+	cancha.global_position = Vector2(0,0)
+	
+	add_child(cancha)
+	
 #endregion

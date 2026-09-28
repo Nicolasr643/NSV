@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://bky8fncyrpsdp"]
+
+[ext_resource type="Script" uid="uid://dj38voo4knxib" path="res://ataque.gd" id="1_xi7wo"]
+[ext_resource type="Texture2D" uid="uid://dnapvekuypcfh" path="res://Sprites/Pelota.png" id="2_liioi"]
+
+[node name="Toca_Pelota" type="Control" unique_id=358988623]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xi7wo")
+
+[node name="Ball" type="TextureButton" parent="." unique_id=797228602]
+top_level = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 100.0
+texture_normal = ExtResource("2_liioi")
+ignore_texture_size = true
+stretch_mode = 0

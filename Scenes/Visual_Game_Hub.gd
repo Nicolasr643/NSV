@@ -25,6 +25,7 @@ func _ready() -> void:
 	Events.finish_game.connect(finalizar_partido)
 	Events.draw_event.connect(add_log)
 	Events.actualizar_rotacion.connect(actualizar_sacador)
+	Events.mostrar_logs.connect(mostrar_todo)
 
 func update_label(label: Label,text: Variant) -> void:
 	var text_final := ""
@@ -60,6 +61,9 @@ func actualizar_sacador(equipo,jugador:Jugador) -> void:
 func finalizar_partido(equipo):
 	print("Ha ganado "+ equipo)
 #endregion
+
+func mostrar_todo(funcionalidad: bool) -> void:
+	self.visible = funcionalidad
 
 
 func add_log(evento: Dictionary) -> void:

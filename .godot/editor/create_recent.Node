@@ -1,3 +1,7 @@
+TextureRect
+Control
+ColorRect
+TextureButton
 Label
 PanelContainer
 GridContainer

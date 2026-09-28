@@ -1,3 +1,6 @@
-res://Scenes/Main.tscn
-res://Scripts/Game_Match_Logic.gd
-res://Scenes/Visual_Game_Hub.gd
+res://Scenes/sombra_pelota.tscn
+res://cancha.gd
+res://Scenes/pelota.tscn
+res://Scripts/flecha.gd
+res://Scenes/ataque.tscn
+res://ataque.gd
