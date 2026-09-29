@@ -4,6 +4,7 @@ extends Resource
 @export var nombre: String
 @export var equipo: String
 @export var posicion_letra: String
+@export var es_usuario: bool
 
 @export_range(0, 100) var fuerza: int
 @export_range(0, 100) var precision: int

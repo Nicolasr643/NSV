@@ -1,6 +1,6 @@
 extends Control
 
-@onready var ball: TextureButton = $Ball
+@onready var ball: TextureButton = %Ball
 
 const ALTURA_ARCO := 40.0
 var tween := create_tween()
@@ -32,10 +32,8 @@ func _on_ball_clicked() -> void:
 	var distancia = Vector2()
 	distancia.x = (2*posicion_click.x - amplitud.x)/amplitud.x
 	distancia.y = (2*posicion_click.y - amplitud.y)/amplitud.y
-	
-	print("Distancia al centro: ", distancia)
-	print("pelota en x: ", posicion_pelota)
-	print("click en: ", posicion_click)
+	Events.direccion_afinada.emit(distancia)
+	self.queue_free()
 
 func _on_pelota_salio() -> void:
 	print("se fue sin tocar")

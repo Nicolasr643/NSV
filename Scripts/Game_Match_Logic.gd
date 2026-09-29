@@ -12,14 +12,13 @@ var roster_local: Array[Jugador] = []
 var roster_rival: Array[Jugador] = []
 
 const NOMBRES := {
-	"Local": ["Fernández", "Gómez", "Rodríguez", "Álvarez", "Suárez", "Benítez"],
+	"Local": ["Fernández", "Rosa (Yo)", "Rodríguez", "Álvarez", "Suárez", "Benítez"],
 	"Rival": ["Cabrera", "Duarte", "Ibáñez", "Molina", "Paredes", "Vega"]
 }
 
 @onready var attack_scene: PackedScene = preload("res://Scenes/cancha.tscn")
 
 const POSICIONES := ["A", "D", "C", "O", "T", "L"]
-
 const MENSAJES := {
 	"Saque": ["Saca"],
 	"Defensa": ["Pero Recibe"],
@@ -34,6 +33,13 @@ var rotacionR := "ADCOTL"
 var sacador = "Local"
 # Shedule
 
+#Probabilidades debug
+var probabilidad_juego = 0.2
+var usuario = null
+
+#Posiciones Ataques:
+
+
 
 
 # Called when the node enters the scene tree for the first time.
@@ -41,7 +47,8 @@ func _ready() -> void:
 	generar_roster()
 	for pj in roster_local:
 		print(pj.nombre)
-
+	usuario = roster_local.filter(func(j): return j.es_usuario).front()
+	print("Jugador: ", usuario )
 
 
 
@@ -57,6 +64,10 @@ func crear_jugador(nombre: String, equipo: String, posicion: String) -> Jugador:
 	j.nombre = nombre
 	j.equipo = equipo
 	j.posicion_letra = posicion
+	if nombre == "Rosa (Yo)":
+		j.es_usuario = true
+	else:
+		j.es_usuario = false
 	return j
 #endregion
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -64,9 +75,9 @@ func crear_jugador(nombre: String, equipo: String, posicion: String) -> Jugador:
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
 		if event.keycode == KEY_1:
-			escena_ataque()
+			pass
 		if event.keycode == KEY_2:
-			jugar_punto()
+			jugar_partido()
 
 func score_point(equipo: String) -> void:
 	if equipo == 'Local':
@@ -130,11 +141,11 @@ func rotar(equipo) -> void:
 		Events.actualizar_rotacion.emit(equipo,jugador_pos(equipo,rotacionR[0]))
 		
 		
-func es_delantero(jugador: String,equipo:String) -> bool:
-	if equipo == 'Local':
-		return rotacionL.find(jugador) > 0 and rotacionL.find(jugador) < 4
-	else:
-		return rotacionR.find(jugador) > 0 and rotacionR.find(jugador) < 4
+func es_delantero(jugador: Jugador) -> bool:
+	var rotacion := rotacionL if jugador.equipo == 'Local' else rotacionR
+	var indice := rotacion.find(jugador.posicion_letra)
+	return indice > 0 and indice < 4
+	
 func jugador_en(equipo: String, numero_pos: int) -> Jugador:
 	var indice_str := numero_pos - 1
 	var rotacion_actual := rotacionL if equipo == "Local" else rotacionR
@@ -151,9 +162,15 @@ func jugador_pos(equipo: String, pos: String) -> Jugador:
 #region sheduler
 # Saque / Defensa / Armado / Ataque
 # Saque -> (Recepcion -> Armado -> Ataque ->)
+func jugar_partido() -> void:
+	while local_points < 25 or rival_points < 25:
+		await jugar_punto()
+
+
 func jugar_punto() -> void:
 	var estado_local = ""
 	var estado_rival = ""
+	var entrasaque = 0
 	
 	var bl_equipo_saque = sacador == 'Local'
 	var rival_saque = 'Rival' if sacador == 'Local' else 'Local' 
@@ -167,7 +184,10 @@ func jugar_punto() -> void:
 			estado_local = 'Defensa'
 	# Punto de saque
 	var jugador_saque = jugador_en(sacador,1)
-	var entrasaque = randi_range(0,10)
+	if jugador_saque == usuario:
+		entrasaque = await escena_ataque(usuario,true)
+	else:
+		entrasaque = randi_range(0,10)
 	
 	if entrasaque > 8:
 		generate_Event(jugador_saque.nombre,'Saque',bl_equipo_saque,1)
@@ -193,7 +213,10 @@ func jugar_punto() -> void:
 		#ataque
 		await get_tree().create_timer(0.5).timeout
 		
-		situacion_punto = randi_range(0,10)
+		if randi_range(0,10)/10 <= probabilidad_juego and equipo_al_balon == 'Local':
+			situacion_punto = await escena_ataque(usuario)
+		else:
+			situacion_punto = randi_range(0,10)
 		
 		if situacion_punto > 8:
 			generate_Event(jugador_pos(equipo_al_balon,"D").nombre,'Ataque',bl_equipo_balon,1)
@@ -211,11 +234,26 @@ func jugar_punto() -> void:
 #endregion
 
 #region escenas
-func escena_ataque() -> void:
+func escena_ataque(usuario,es_saque = false) -> int:
+	
+	
 	var cancha = attack_scene.instantiate()
 	Events.mostrar_logs.emit(false)
 	cancha.global_position = Vector2(0,0)
-	
+	if es_saque:
+		cancha.posicion_ataque = Vector2(230, 564)
+	elif es_delantero(usuario):
+		cancha.posicion_ataque = Vector2(76, 328)
+	else:
+		cancha.posicion_ataque = Vector2(155, 458)
 	add_child(cancha)
+	await Events.ataque_terminado
+	
+	print(cancha.estado_final)
+	var resultado = cancha.estado_final
+	cancha.queue_free()
+	Events.mostrar_logs.emit(true)
+	return resultado
+	
 	
 #endregion

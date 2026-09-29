@@ -18,7 +18,7 @@ func _gui_input(event: InputEvent) -> void:
 		elif arrastrando:
 
 			var tiro = soltar(event.position)
-			Events.enviar_direccion.emit(tiro)
+			Events.direccion_seleccionada.emit(tiro)
 	elif event is InputEventMouseMotion and arrastrando:
 		actualizar_arrastre(event.position)
 
@@ -36,8 +36,8 @@ func soltar(pos_mouse: Vector2):
 	var disparo := calcular_disparo(pos_mouse)
 	flecha.ocultar()
 	if disparo.intensidad >= INTENSIDAD_MIN:
-		disparo_lanzado.emit(disparo.direccion, disparo.intensidad)
-	return {"direccion": disparo.direccion, "intensidad": disparo.intensidad}
+		return disparo
+	
 
 func calcular_disparo(pos_mouse: Vector2) -> Dictionary:
 	var arrastre := pos_mouse - icono_pelota.size / 2.0

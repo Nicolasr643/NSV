@@ -4,7 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://dcyb7u5bktfmv" path="res://Sprites/Cancha.png" id="2_8roi0"]
 [ext_resource type="PackedScene" uid="uid://b20jwtjgs7ms7" path="res://Scenes/pelota.tscn" id="2_o0phj"]
 [ext_resource type="PackedScene" uid="uid://b56ajwehv1uq7" path="res://Scenes/sombra_pelota.tscn" id="3_o0phj"]
-[ext_resource type="PackedScene" uid="uid://bky8fncyrpsdp" path="res://Scenes/ataque.tscn" id="4_fkth8"]
 
 [node name="Cancha" type="Control" unique_id=1704209549]
 layout_mode = 3
@@ -13,11 +12,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(155, 458)
+pivot_offset = Vector2(76, 369)
 script = ExtResource("1_o0y13")
 escena_pelota = ExtResource("2_o0phj")
 escena_sombra_pelota = ExtResource("3_o0phj")
-escena_presicion = ExtResource("4_fkth8")
 
 [node name="Fondo" type="TextureRect" parent="." unique_id=1128458040]
 layout_mode = 1
@@ -26,6 +24,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(427, 186)
+pivot_offset = Vector2(52, 53)
 texture = ExtResource("2_8roi0")
 expand_mode = 1
