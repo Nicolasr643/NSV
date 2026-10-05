@@ -17,8 +17,8 @@ const ALTURA_BASE := 30.0
 const ALTURA_TOPE := 120.0
 const DISTANCIA_MAX := 400.0
 const VELOCIDAD_PX_S := 500.0
-const DURACION_MIN := 1.0
-const DURACION_MAX := 3.0
+const DURACION_MIN := 0.2
+const DURACION_MAX := 1.5
 const DESVIO_MAX_GRADOS := 30.0
 
 var tween: Tween
@@ -60,7 +60,7 @@ func calcular_tiro(ajuste):
 		tween.kill()
 	var origen_suelo = pelota.global_position + Vector2(0.0, ALTURA_BASE)
 	var distancia: float = DISTANCIA_MAX * tirobase.intensidad * (1.0 + ajuste.y)
-	var duracion := clampf(distancia / VELOCIDAD_PX_S, DURACION_MIN, DURACION_MAX)
+	var duracion := clampf((DURACION_MAX + DURACION_MIN)/2 * (1+ajuste.y), DURACION_MIN, DURACION_MAX)
 	var direccion: Vector2 = tirobase.direccion.rotated(deg_to_rad(DESVIO_MAX_GRADOS * -ajuste.x))
 	var recorrido := direccion * distancia
 	var elevacion := deg_to_rad(clampf(75.0 * ajuste.y, 0.0, 75.0))
@@ -69,7 +69,6 @@ func calcular_tiro(ajuste):
 	tween = create_tween()
 	tween.tween_method(mover_pelota.bind(origen_suelo, recorrido, altura_max), 0.0, 1.0, duracion)
 	fue_punto(recorrido + origen_suelo)
-	await get_tree().create_timer(1.0).timeout
 	tween.finished.connect(ataque_finalizado)
 
 func mover_pelota(t: float, origen_suelo: Vector2, recorrido: Vector2, altura_max: float) -> void:
@@ -97,5 +96,6 @@ func fue_punto(ubicacion: Vector2):
 	else:
 		estado_final = 1
 func ataque_finalizado() -> void:
+	await get_tree().create_timer(1.0).timeout
 	Events.ataque_terminado.emit()
 	

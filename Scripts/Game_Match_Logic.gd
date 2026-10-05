@@ -38,7 +38,14 @@ var probabilidad_juego = 0.2
 var usuario = null
 
 #Posiciones Ataques:
-
+const POS_ATAQUE := {
+	1:Vector2(232,495),
+	2:Vector2(259,233),
+	3:Vector2(165,234),
+	4:Vector2(65,233),
+	5:Vector2(62,397),
+	6:Vector2(173,378)
+}
 
 
 
@@ -130,22 +137,27 @@ func process_event(evento: Dictionary) -> void:
 #region posiciones
 func rotar(equipo) -> void:
 	if equipo == 'Local':
-		rotacionL = rotacionL[-1] + rotacionL.substr(0, rotacionL.length() - 1)
+		rotacionL =  rotacionL.substr(1, rotacionL.length()) + rotacionL[0]
 		print("Local")
 		print(rotacionL)
 		Events.actualizar_rotacion.emit(equipo,jugador_pos(equipo,rotacionL[0]))
 	else:
-		rotacionR = rotacionR[-1] + rotacionR.substr(0, rotacionR.length() - 1)
+		rotacionR = rotacionR.substr(1, rotacionR.length()) + rotacionR[0]
 		print("Rival")
 		print(rotacionR)
 		Events.actualizar_rotacion.emit(equipo,jugador_pos(equipo,rotacionR[0]))
 		
-		
-func es_delantero(jugador: Jugador) -> bool:
+func posicion_jugador(jugador: Jugador) -> int:
 	var rotacion := rotacionL if jugador.equipo == 'Local' else rotacionR
 	var indice := rotacion.find(jugador.posicion_letra)
+	return indice + 1 
+
+func es_delantero(jugador: Jugador) -> bool:
+	var indice = posicion_jugador(jugador)
 	return indice > 0 and indice < 4
-	
+
+
+
 func jugador_en(equipo: String, numero_pos: int) -> Jugador:
 	var indice_str := numero_pos - 1
 	var rotacion_actual := rotacionL if equipo == "Local" else rotacionR
@@ -240,12 +252,11 @@ func escena_ataque(usuario,es_saque = false) -> int:
 	var cancha = attack_scene.instantiate()
 	Events.mostrar_logs.emit(false)
 	cancha.global_position = Vector2(0,0)
+	print(posicion_jugador(usuario))
 	if es_saque:
 		cancha.posicion_ataque = Vector2(230, 564)
-	elif es_delantero(usuario):
-		cancha.posicion_ataque = Vector2(76, 328)
 	else:
-		cancha.posicion_ataque = Vector2(155, 458)
+		cancha.posicion_ataque = POS_ATAQUE[posicion_jugador(usuario)]
 	add_child(cancha)
 	await Events.ataque_terminado
 	
